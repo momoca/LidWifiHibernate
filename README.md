@@ -12,7 +12,7 @@ Windows 11 合盖休眠规避工具。合盖时先禁用 MediaTek MT7922（RZ616
 Get-PnpDevice -PresentOnly -Class Net | Format-Table FriendlyName, InstanceId -AutoSize
 ```
 
-2. 找到实体无线网卡。编辑 MT7922-Power.ps1，将匹配条件 PCI\VEN_14C3&DEV_0616&* 改成自己的网卡 ID。要针对一台电脑精确匹配，可用 InstanceId -eq '你的完整设备实例 ID'。确保只匹配一张实体 Wi-Fi 网卡。
+2. 找到实体无线网卡。编辑 WifiPower.ps1，将匹配条件 PCI\VEN_14C3&DEV_0616&* 改成自己的网卡 ID。要针对一台电脑精确匹配，可用 InstanceId -eq '你的完整设备实例 ID'。确保只匹配一张实体 Wi-Fi 网卡。
 3. 运行 build.bat 将脚本嵌入新的 EXE，再以管理员身份运行安装脚本。仅编辑外部 PS1 不会改变已编译的 EXE。
 
 ## 背景与实测
@@ -30,10 +30,10 @@ Get-PnpDevice -PresentOnly -Class Net | Format-Table FriendlyName, InstanceId -A
 
 ## 安装
 
-在 Windows x64 上，将 MT7922-Lid-Auto.exe 和 Install-MT7922-Lid.ps1 放在同一目录。在管理员 PowerShell 中切到该目录，运行：
+在 Windows x64 上，将 LidWifiHibernate.exe 和 Install-LidWifiHibernate.ps1 放在同一目录。在管理员 PowerShell 中切到该目录，运行：
 
 ```powershell
-.\Install-MT7922-Lid.ps1
+.\Install-LidWifiHibernate.ps1
 ```
 
 默认日志：C:\Program Files\MT7922-Lid-Auto\power.log。
@@ -45,12 +45,13 @@ Get-PnpDevice -PresentOnly -Class Net | Format-Table FriendlyName, InstanceId -A
 以管理员身份运行：
 
 ```powershell
-.\Install-MT7922-Lid.ps1 -Undo
+.\Install-LidWifiHibernate.ps1 -Undo
 ```
 
-这会移除登录任务，并将当前电源计划的合盖动作设回“休眠”。如果 Wi-Fi 仍然禁用，可在设备管理器重新启用 MT7922，或以管理员身份运行 .\MT7922-Power.ps1 -Mode Restore。
+这会移除登录任务，并将当前电源计划的合盖动作设回“休眠”。如果 Wi-Fi 仍然禁用，可在设备管理器重新启用 MT7922，或以管理员身份运行 .\WifiPower.ps1 -Mode Restore。
 
 ## 从源码构建
 
-LidWindow.cs 是后台监听器。MT7922-Power.ps1 在编译时嵌入 EXE，负责网卡和电源操作。双击 build.bat，使用 Windows 自带的 .NET Framework x64 C# 编译器生成 MT7922-Lid-Auto.exe。编译后重跑安装脚本更新已安装版本。
+LidWindow.cs 是后台监听器。WifiPower.ps1 在编译时嵌入 EXE，负责网卡和电源操作。双击 build.bat，使用 Windows 自带的 .NET Framework x64 C# 编译器生成 LidWifiHibernate.exe。编译后重跑安装脚本更新已安装版本。
+
 

@@ -3,7 +3,7 @@ param([switch]$Undo)
 $ErrorActionPreference='Stop'
 $name='MT7922-Lid-Auto'
 $dir=Join-Path $env:ProgramFiles $name
-$bin=Join-Path $dir 'MT7922-Lid-Auto.exe'
+$bin=Join-Path $dir 'LidWifiHibernate.exe'
 function Set-LidAction([int]$value) {
     foreach($option in '/setacvalueindex','/setdcvalueindex'){
         & powercfg.exe $option SCHEME_CURRENT SUB_BUTTONS LIDACTION $value
@@ -25,7 +25,7 @@ New-Item -ItemType Directory -Path $dir -Force | Out-Null
 if(Get-ScheduledTask -TaskName $name -ErrorAction SilentlyContinue){
     Stop-ScheduledTask -TaskName $name
 }
-Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'MT7922-Lid-Auto.exe') -Destination $bin -Force
+Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'LidWifiHibernate.exe') -Destination $bin -Force
 $action=New-ScheduledTaskAction -Execute $bin
 $trigger=New-ScheduledTaskTrigger -AtLogOn -User $user
 $principal=New-ScheduledTaskPrincipal -UserId $user -LogonType Interactive -RunLevel Highest
@@ -40,4 +40,6 @@ try {
     Set-LidAction 2
     throw
 }
+
+
 
